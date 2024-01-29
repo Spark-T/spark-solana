@@ -1166,7 +1166,7 @@ mod tests {
 
         let expected_result: Vec<TransactionCheckResult> =
             vec![
-                (Err(TransactionError::AlreadyProcessed), None, Some(0));
+                (Err(TransactionError::AlreadyProcessed), None, None);
                 sanitized_bundle.transactions.len()
             ];
 
