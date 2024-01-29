@@ -1155,7 +1155,7 @@ mod tests {
             &None,
             false,
             None,
-            &vec![None; 2],
+            &[None; 2],
             &vec![None; bundle.transactions.len()],
         );
         assert_matches!(
@@ -1176,7 +1176,7 @@ mod tests {
             false,
             None,
             &vec![None; bundle.transactions.len()],
-            &vec![None; 2],
+            &[None; 2],
         );
         assert_matches!(
             result.result,
