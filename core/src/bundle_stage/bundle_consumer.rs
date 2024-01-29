@@ -779,6 +779,7 @@ impl BundleConsumer {
 
 #[cfg(test)]
 mod tests {
+    use solana_accounts_db::transaction_results::TransactionCheckResult;
     use {
         crate::{
             bundle_stage::{
@@ -1163,14 +1164,11 @@ mod tests {
             &mut error_metrics,
         );
 
-        let expected_result: Vec<(
-            Result<(), TransactionError>,
-            Option<NoncePartial>,
-            Option<u64>,
-        )> = vec![
-            (Err(TransactionError::AlreadyProcessed), None, Some(0));
-            sanitized_bundle.transactions.len()
-        ];
+        let expected_result: Vec<TransactionCheckResult> =
+            vec![
+                (Err(TransactionError::AlreadyProcessed), None, Some(0));
+                sanitized_bundle.transactions.len()
+            ];
 
         assert_eq!(check_results, expected_result);
 
