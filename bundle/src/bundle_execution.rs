@@ -1132,6 +1132,7 @@ mod tests {
     /// Tests that when the max processing time is exceeded, the bundle is an error
     #[test]
     fn test_bundle_bad_pre_post_accounts() {
+        const PRE_EXECUTION_ACCOUNTS: [Option<Vec<Pubkey>>; 2] = [None, None];
         let (genesis_config_info, bank) = create_simple_test_bank(MINT_AMOUNT_LAMPORTS);
 
         let kp = Keypair::new();
@@ -1155,7 +1156,7 @@ mod tests {
             &None,
             false,
             None,
-            &[None; 2],
+            &PRE_EXECUTION_ACCOUNTS,
             &vec![None; bundle.transactions.len()],
         );
         assert_matches!(
@@ -1176,7 +1177,7 @@ mod tests {
             false,
             None,
             &vec![None; bundle.transactions.len()],
-            &[None; 2],
+            &PRE_EXECUTION_ACCOUNTS,
         );
         assert_matches!(
             result.result,
