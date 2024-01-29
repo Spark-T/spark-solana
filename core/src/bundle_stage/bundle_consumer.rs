@@ -779,7 +779,6 @@ impl BundleConsumer {
 
 #[cfg(test)]
 mod tests {
-    use solana_accounts_db::transaction_results::TransactionCheckResult;
     use {
         crate::{
             bundle_stage::{
@@ -796,7 +795,10 @@ mod tests {
         crossbeam_channel::{unbounded, Receiver},
         jito_tip_distribution::sdk::derive_tip_distribution_account_address,
         rand::{thread_rng, RngCore},
-        solana_accounts_db::transaction_error_metrics::TransactionErrorMetrics,
+        solana_accounts_db::{
+            transaction_error_metrics::TransactionErrorMetrics,
+            transaction_results::TransactionCheckResult,
+        },
         solana_cost_model::{block_cost_limits::MAX_BLOCK_UNITS, cost_model::CostModel},
         solana_gossip::{cluster_info::ClusterInfo, contact_info::ContactInfo},
         solana_ledger::{
