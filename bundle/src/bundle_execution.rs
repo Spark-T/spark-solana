@@ -239,8 +239,8 @@ pub fn load_and_execute_bundle<'a>(
     // these must be the same length as the bundle's transactions
     // allows one to read account state before and after execution of each transaction in the bundle
     // will use AccountsOverride + Bank
-    pre_execution_accounts: &Vec<Option<Vec<Pubkey>>>,
-    post_execution_accounts: &Vec<Option<Vec<Pubkey>>>,
+    pre_execution_accounts: &[Option<Vec<Pubkey>>],
+    post_execution_accounts: &[Option<Vec<Pubkey>>],
 ) -> LoadAndExecuteBundleOutput<'a> {
     if pre_execution_accounts.len() != post_execution_accounts.len()
         || post_execution_accounts.len() != bundle.transactions.len()
