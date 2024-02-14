@@ -9,14 +9,15 @@ jobs:
     strategy:
       matrix:
         branch:
-          - master
-          - v1.18
+#          - master
+#          - v1.18
           - v1.17
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ matrix.branch }}
           submodules: recursive
+          fetch-depth: 0
       - name: Add upstream
         run: git remote add upstream https://github.com/solana-labs/solana.git
       - name: Fetch upstream
