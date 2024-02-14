@@ -1,0 +1,25 @@
+name: "Rebase Jito-Solana from upstream solana-labs/solana"
+
+on:
+  push:
+
+jobs:
+  rebase:
+    runs-on: big-runner-1
+    strategy:
+      matrix:
+        branch:
+          - master
+          - v1.18
+          - v1.17
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.branch }}
+          submodules: recursive
+      - name: Add upstream
+        run: git remote add upstream https://github.com/solana-labs/solana.git
+      - name: Fetch upstream
+        run: git fetch upstream
+      - name: Rebase
+        run: git rebase upstream/${{ matrix.branch }}
