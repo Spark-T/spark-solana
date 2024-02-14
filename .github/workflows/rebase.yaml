@@ -20,6 +20,6 @@ jobs:
       - name: Add upstream
         run: git remote add upstream https://github.com/solana-labs/solana.git
       - name: Fetch upstream
-        run: git fetch upstream
+        run: git fetch upstream ${{ matrix.branch }}
       - name: Rebase
         run: git rebase upstream/${{ matrix.branch }}
