@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         branch:
-#          - master
+          #          - master
           - v1.18
           - v1.17
     steps:
@@ -22,8 +22,12 @@ jobs:
         run: git remote add upstream https://github.com/solana-labs/solana.git
       - name: Fetch upstream
         run: git fetch upstream ${{ matrix.branch }}
+      - name: Set REBASE_BRANCH
+        run: echo "REBASE_BRANCH=ci/nightly/${{ matrix.branch }}/$(date +'%Y-%m-%d-%H-%M')" >> $GITHUB_ENV
+      - name: echo $REBASE_BRANCH
+        run: echo $REBASE_BRANCH
       - name: Create rebase branch
-        run: git checkout -b ci/nightly/${{ matrix.branch }}/$(date +'%Y-%m-%d')
+        run: git checkout -b $REBASE_BRANCH
       - name: Rebase
         run: git rebase upstream/${{ matrix.branch }}
       - name: Send warning for rebase error
@@ -36,3 +40,8 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ env.REBASE_BRANCH }}
