@@ -22,5 +22,7 @@ jobs:
         run: git remote add upstream https://github.com/solana-labs/solana.git
       - name: Fetch upstream
         run: git fetch upstream ${{ matrix.branch }}
+      - name: Create rebase branch
+        run: git checkout -b ci/nightly/${{ matrix.branch }}/$(date +'%Y-%m-%d')
       - name: Rebase
         run: git rebase upstream/${{ matrix.branch }}
