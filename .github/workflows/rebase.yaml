@@ -59,18 +59,18 @@ jobs:
 
             state=$(echo $response | jq -r '.[0].state')
             echo "Current build state: $state"
-        
+
             # Check if the state is one of the finished states
             case $state in
               "passed"|"finished")
                 echo "Build finished successfully."
                 exit 0
               ;;
-              "failing"|"failed"|"cancelled"|"canceling"|"not_run")
+              "failing"|"failed"|"canceled"|"canceling"|"not_run")
                 echo "Build failed or was cancelled."
                 exit 2
               ;;
             esac
-        
+
           sleep 30
           done
