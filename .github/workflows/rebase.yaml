@@ -47,11 +47,30 @@ jobs:
           branch: ${{ env.REBASE_BRANCH }}
       - name: Wait for buildkite to start build
         run: sleep 20
-      - name: Wait for buildkite to succeed or fail
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 240
-          retry_wait_seconds: 30
-          command: |
-            state=$(curl -H "Authorization: Bearer ${{ secrets.BUILDKITE_TOKEN }}" "https://api.buildkite.com/v2/organizations/jito/pipelines/jito-solana/builds?commit=${{ github.sha }}" | jq -r '.[0].state')
-            echo $state
+      - name: Wait for buildkite to finish
+        timeout-minutes: 300
+        run: |
+          while true; do
+            response=$(curl -s -f -H "Authorization: Bearer ${{ secrets.BUILDKITE_TOKEN }}" "https://api.buildkite.com/v2/organizations/jito/pipelines/jito-solana/builds?commit=${{ github.sha }}")
+            if [ $? -ne 0 ]; then
+              echo "Curl request failed."
+              exit 1
+            fi
+
+            state=$(echo $response | jq -r '.[0].state')
+            echo "Current build state: $state"
+        
+            # Check if the state is one of the finished states
+            case $state in
+              "passed"|"finished")
+                echo "Build finished successfully."
+                exit 0
+              ;;
+              "failing"|"failed"|"cancelled"|"canceling"|"not_run")
+                echo "Build failed or was cancelled."
+                exit 2
+              ;;
+            esac
+        
+          sleep 30
+          done
